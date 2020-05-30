@@ -7,7 +7,8 @@ export default class PlayerControl extends cc.Component {
 
     speed : number;
     gravity : number;
-    dir : number = 0;
+    dir: number = 0;
+    dirY: number = 0;
     public keys : Map<number, boolean> = new Map();
     playerData : PlayerData;
     // ---------------------------------------------------------
@@ -28,29 +29,38 @@ export default class PlayerControl extends cc.Component {
         cc.log("PlayerControl start");
         this.playerData = new PlayerData();
         this.playerData.x = this.node.x;
-
+        this.playerData.y = this.node.y;//tho
         this.websocketCtr = cc.find('Canvas/GameWorld')
         .getComponent(WebsocketControl);
     }
-    update (dt) {
-        if(this.dir == 0) 
+    update(dt) {
+        if (this.dir == 0 && this.dirY ==0) 
             return;
-
+        
         this.speed -= this.gravity * dt;
         this.node.x += this.speed * this.dir * dt;
         this.playerData.x = this.node.x;
-
+        //tho
+        this.node.y += this.speed * this.dirY * dt;
+        this.playerData.y = this.node.y;
+        
         if(this.websocketCtr != null) {
             this.websocketCtr.Send(this.getInfo(KEY_INGAME));
+            //tho
+            this.websocketCtr.websocket.onmessage = function (getdata) {
+                // console.log(event.data);
+            }
+            
         }
     }
 
     public getInfo(type : string) {
         this.playerData.x = this.node.x;
-       /* if(this.websocketCtr != null) {
+        this.playerData.y = this.node.y;//tho
+      /*  if(this.websocketCtr != null) {
             this.playerData.id = this.websocketCtr.playerDataMe.id;
-        }
-        */
+        }*/
+        
         this.playerData.type = type;
         return JSON.stringify(this.playerData);
     }
@@ -64,13 +74,22 @@ export default class PlayerControl extends cc.Component {
                 break;
             case cc.macro.KEY.left : 
                 this.dir = -1;
-            break;
+                break;
+            case cc.macro.KEY.up:
+                this.dirY = 1;
+                break;
+            case cc.macro.KEY.down:
+                this.dirY = -1;
+                break;
         }
         console.log(this.keys.size);
     }
     onKeyUp(e:cc.Event.EventCustom){
         this.keys.delete(e.keyCode);
         this.dir = 0;
+        this.dirY = 0
     }
+
+   
 
 }

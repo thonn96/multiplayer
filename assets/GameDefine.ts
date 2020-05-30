@@ -1,16 +1,27 @@
 
 export class PlayerData implements DataSocket{ 
     id : string;
-    x : number;
+    x: number;
+    y: number;
     key : string;
     type : string;
     
     node : cc.Node;
 }
+export class EggData implements DataSocket {
+    id: string;
+    x: number;
+    y: number;
+    key: string;
+    type: string;
+
+    node: cc.Node;
+}
 
 export interface DataSocket {
     id : string;
-    x : number;
+    x: number;
+    y: number;
     key : string;
     type : string;
 }
