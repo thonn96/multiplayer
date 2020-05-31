@@ -42,7 +42,7 @@ export default class PlayerControl extends cc.Component {
     update(dt) {
         if (this.dir == 0 && this.dirY ==0) 
             return;
-        
+
         this.speed -= this.gravity * dt;
         this.node.x += this.speed * this.dir * dt;
         this.playerData.x = this.node.x;

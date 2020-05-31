@@ -1,7 +1,8 @@
 const {ccclass, property} = cc._decorator;
 
 import PlayerControl from './PlayerControl';
-import { PlayerData, KEY_CONNECTED, KEY_READY, KEY_INGAME } from './GameDefine';
+import { PlayerData, KEY_CONNECTED, KEY_READY, KEY_INGAME, PlayerDataAI } from './GameDefine';
+import PlayerAI from './PlayerAI';
 
 // doc 
 // https://docs.cocos2d-x.org/creator/manual/en/scripting/network.html 
@@ -15,19 +16,30 @@ export default class WebsocketControl extends cc.Component {
     player: PlayerControl;
     playerDataMe : PlayerData = null;
     playerDataRivel: PlayerData = null;
-    playerAI: PlayerData = null;
+    playerAI: PlayerDataAI = null;
+    @property(cc.Prefab) prefab_PlayerAi: cc.Prefab = null;
     @property(cc.Prefab) prefab_Player: cc.Prefab = null;
     @property(cc.Prefab) eggfab: cc.Prefab = null;
-
+  
     @property
     maxStarDuration: number = 0;
     @property
     minStarDuration: number = 0;
     // create AI
     createAI() {
-       var playerAI = cc.instantiate(this.prefab_Player);
-        playerAI.parent = cc.director.getScene();
-        playerAI.setPosition(50, 300);    
+
+        for (let i = 0; i < 5; ++i) {   
+            var playerAI = cc.instantiate(this.prefab_PlayerAi);
+            this.node.addChild(playerAI);
+            playerAI.setPosition(i * 10, i * 20);
+        }
+    
+     /*   for (let i = 0; i < 5; ++i) {
+            var scene = cc.director.getScene();
+            var node = cc.instantiate(this.prefab_PlayerAi);
+            node.parent = scene;
+            
+        }*/
     }
      
     //
@@ -95,9 +107,11 @@ export default class WebsocketControl extends cc.Component {
         
     }
 
-    update (dt) {
-        if(this.isConnected == false) 
-            return;
+    update(dt) {
+        
+       // if(this.isConnected == false) 
+      //      return;
+
 
         // this.Send('dt: ' + dt);
     }

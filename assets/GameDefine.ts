@@ -8,6 +8,15 @@ export class PlayerData implements DataSocket{
     
     node : cc.Node;
 }
+export class PlayerDataAI implements DataSocket {
+    id: string;
+    x: number;
+    y: number;
+    key: string;
+    type: string;
+
+    node : cc.Node;
+}
 export class EggData implements DataSocket {
     id: string;
     x: number;
