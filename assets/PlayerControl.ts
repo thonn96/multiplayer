@@ -9,8 +9,11 @@ export default class PlayerControl extends cc.Component {
     gravity : number;
     dir: number = 0;
     dirY: number = 0;
+   
     public keys : Map<number, boolean> = new Map();
-    playerData : PlayerData;
+    playerData: PlayerData;
+    playerDataRivel: PlayerData = null;
+   
     // ---------------------------------------------------------
     websocketCtr : WebsocketControl = null;
     
@@ -23,7 +26,8 @@ export default class PlayerControl extends cc.Component {
         cc.systemEvent.on(cc.SystemEvent.EventType.KEY_DOWN,
             this.onKeyDown,this);
         cc.systemEvent.on(cc.SystemEvent.EventType.KEY_UP,
-            this.onKeyUp,this);         
+            this.onKeyUp, this);    
+        
     }
     start () {
         cc.log("PlayerControl start");
@@ -31,7 +35,9 @@ export default class PlayerControl extends cc.Component {
         this.playerData.x = this.node.x;
         this.playerData.y = this.node.y;//tho
         this.websocketCtr = cc.find('Canvas/GameWorld')
-        .getComponent(WebsocketControl);
+            .getComponent(WebsocketControl);
+        //tho
+     
     }
     update(dt) {
         if (this.dir == 0 && this.dirY ==0) 
@@ -46,11 +52,7 @@ export default class PlayerControl extends cc.Component {
         
         if(this.websocketCtr != null) {
             this.websocketCtr.Send(this.getInfo(KEY_INGAME));
-            //tho
-            this.websocketCtr.websocket.onmessage = function (getdata) {
-                // console.log(event.data);
-            }
-            
+ 
         }
     }
 

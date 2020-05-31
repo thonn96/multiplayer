@@ -24,34 +24,27 @@ export default class NewClass extends cc.Component {
     node: any;
 
     // LIFE-CYCLE CALLBACKS:
-    setJumpAction() {
-        var jumUp = cc.moveBy(this.jumpDuration, cc.v2(0, this.jumpHeight)).easing(cc.easeCubicActionInOut());
-        var jumpDown = cc.moveBy(this.jumpDuration, cc.v2(0, this.jumpHeight)).easing(cc.easeCubicActionInOut());
-        return cc.repeatForever(cc.sequence(jumUp, jumpDown));
-
-    }
+    websocketCtr: WebsocketControl = null;
 
     //
     onCollisionEnter(selfCollider, otherCollider) {
         console.log(selfCollider.name);
         console.log(otherCollider.name);
-        if (otherCollider.name = 'Player1<CircleCollider>') {
-            this.node.parent.getComponent('DemoWebsocket').spawnNewEgg();         
+        if (otherCollider.name = 'Player1<CircleCollider>' && selfCollider.name == 'Player<CircleCollider>') {
             this.node.destroy();
         }
     }
     onLoad() {
-        //this.jumpAction = this.setJumpAction();
-       // this.node.runAction(this.jumpAction);
         var manager = cc.director.getCollisionManager();
         manager.enabled = true;
-        manager.enabledDebugDraw = true;
-        manager.enabledDrawBoundingBox = true;
     }
 
     start () {
 
     }
 
-     update (dt) {}
+    //update (dt) {}
+    onDestroy() {
+        this.node.parent.getComponent('DemoWebsocket').spawnNewEgg();         
+    }
 }
